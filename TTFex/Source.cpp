@@ -62,9 +62,14 @@ void TextObject::update()
 		int lineWidth = 0;
 		while (lineWidth < SCREEN_WIDTH && c < text.length()) //add char
 		{
-			line += text.c_str()[c];
+			if (text[c] == '\n') //newline
+			{
+				c++;
+				break;
+			}
+			line += text[c];
 			TTF_SizeText(font, line.c_str(), &lineWidth, nullptr);
-			c++;
+			c++;		
 		}
 		if (lineWidth > SCREEN_WIDTH) //line too long
 		{
@@ -228,8 +233,16 @@ void handleEvents()
 			{
 				//lop off character
 				textArea.text.pop_back();
-				textArea.update();
 			}
+			else if (e.key.keysym.sym == SDLK_RETURN)
+			{
+				textArea.text += '\n';
+			}
+			else if (e.key.keysym.sym == SDLK_TAB)
+			{
+				textArea.text += "   ";
+			}
+			textArea.update();
 			break;
 		case SDL_TEXTINPUT:
 			textArea.text += e.text.text[0];
@@ -256,7 +269,9 @@ int main()
 	//TextObject textArea;
 	gFont = loadFont("lucon.ttf", 36);
 	textArea.chooseFont(gFont);
-	textArea.makeText("qwertyuiopåasdfghjklöäzxcvbnmQWERTYUIOPÅASDFGHJKLÖÄZXCVBNM");
+	//textArea.makeText("qwertyu\niopåasdfghjklöäzxcvbnmQWERTYUIOPÅASDFGHJKLÖÄZXCVBNM");
+
+	//cout << textArea.text;
 
 	while (!quit)
 	{
