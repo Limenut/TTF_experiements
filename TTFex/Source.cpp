@@ -273,6 +273,49 @@ int main()
 
 	//cout << textArea.text;
 
+	int x = 0;
+	int w = 10;
+	int h = 10;
+	SDL_Color color1 = { 255,255,255 };
+	SDL_Color color2 = { 0,0,0 };
+
+	while (!quit)
+	{
+		handleEvents();
+
+		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+		SDL_RenderFillRect(gRenderer, NULL);
+
+		for (int i = 0; i < h; i++)
+		{
+
+			SDL_SetRenderDrawColor(gRenderer, color1.r, color1.g, color1.b, 255);
+			SDL_RenderDrawPoint(gRenderer, x, 100+i);
+
+			for (int j = 1; j < w; j++)
+			{
+				SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
+				SDL_RenderDrawPoint(gRenderer, x + j, 100+i);
+			}
+
+			SDL_SetRenderDrawColor(gRenderer, color2.r, color2.g, color2.b, 255);
+			SDL_RenderDrawPoint(gRenderer, x + w, 100+i);
+
+			if (color1.r) { color1.r--; color2.r++; }
+			else if (color1.g) { color1.g--; color2.g++; }
+			else if (color1.b) { color1.b--; color2.b++; }
+			else
+			{
+				color1 = { 255,255,255 }; color2 = { 0,0,0 };
+				x++;
+			}
+		}
+
+		SDL_RenderPresent(gRenderer);
+		SDL_Delay(17*2);
+	}
+	quit = false;
+
 	while (!quit)
 	{
 		handleEvents();
